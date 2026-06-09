@@ -6,6 +6,18 @@ This repository includes the PCB design for a 4x4 mixing matrix that can be used
   <img src="pcb_design.png" width="400">
 </p>
 
+# Settings calculation
+This MATLAB script calculate_settings_4x4.mat generates optimized hardware settings for a 4×4 RF compression matrix using measured calibration data. It supports loading a target compression matrix, generating random test matrices, or manually defining custom amplitude and phase targets.
+
+The script:
+
+* Loads and normalizes calibration measurements for attenuation and phase
+* Interpolates calibration data to a uniform resolution
+* Matches target amplitude/phase values to the closest hardware configuration
+* Computes attenuator settings, phase shifter voltages, and binary control values for each channel
+* Exports the resulting configuration as a `.h` header file for direct integration into the Arduino IDE
+
+This tool is designed for automated calibration and control of modular 4×4 RF matrix hardware systems.
 
 # IDE code
 The code to run the compression matrix is included in IDE/4x4_matrix_settings. 

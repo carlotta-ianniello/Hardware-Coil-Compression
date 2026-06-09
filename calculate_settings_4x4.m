@@ -2,22 +2,19 @@ clear
 
 %save_settings_txt = 0; % save settings in text file
 export_to_IDE = 1;% Generate .h file to export into Arduino IDE
-%dothfilenamepath = 'C:\Users\iannic01\Personal\Research\Arduino_test\modular_board_test\4x4_matrix\4x4_calibration_mod\calibration_mod\4x4_validation\4x4_validation_mod\';
-dothfilenamepath = 'C:\Users\iannic01\Personal\Research\Arduino_test\modular_board_test\4x4_matrix\4x4_matrix_settings';
+dothfilenamepath = 'yourpath\4x4_matrix_settings';
 dothfilename = [dothfilenamepath 'setting_compression_matrix_ch1357'];
 
 %% =========================
 % USER TARGET (4x4 INPUT)
 %% =========================
-loadC = 1;    % Load Calibration matrix
-randC = 0;    % Generate random Calibration matrix with Att = [-40 -16] and Ph = [0 180] (used for validation)
+loadC = 0;    % Load Calibration matrix
+randC = 1;    % Generate random Calibration matrix with Att = [-40 -16] and Ph = [0 180] (used for validation)
 useCalVal = 0; % Set as target Calibration matrix a combination of settings that was measured during calibration (sanity check)
 
-%if (load_C && rand_C && useCalVal) || (load_C && rand_C) || (rand_C && useCalVal) || (load_C && useCalVal)
 if loadC+randC+useCalVal>1
     error('Please select either loadC, randC or useCalVal');
 end
-
 
 if (loadC)
     fprintf('Load Compression Matrix\n');
@@ -34,8 +31,6 @@ if (loadC)
 
 elseif randC
     fprintf('Randomly Generated Compression Matrix\n');
-    % range_amp = [0 1];
-    % C_amp_target = range_amp(1) + (range_amp(2) - range_amp(1)) * rand(4,4);
     range_amp = [16 40];
     C_amp_target = range_amp(1) + (range_amp(2) - range_amp(1)) * rand(4,4);
     range_ph = [0 180];
@@ -60,8 +55,6 @@ else
     C_amp_rel = C_amp_target./max(C_amp_target(:));
     C_ph_rel  = C_ph_target;
 end
-
-
 
 %% =========================
 % PATH + LOAD CALIBRATION
@@ -144,8 +137,6 @@ end
 % TARGET FORMATTING
 %% =========================
 if ~(randC)
-    %C_amp = -(-ceil(boundariesAtt(1)) + 1 - db(C_amp_rel,'power'));
-    %C_amp = -(-ceil(boundariesAtt(1)) + 1 - db(C_amp_rel,'voltage'));
     C_amp = -(-ceil(boundariesAtt(1)) - db(C_amp_rel,'voltage'));
 
 elseif randC
@@ -155,28 +146,6 @@ end
 C_ph  = C_ph_rel + 10 - min(C_ph_rel(:));
 
 C_amp(isinf(C_amp)) = -45;
-
-
-
-% if randC
-%     C_amp = C_amp_rel;
-%     C_ph  = C_ph_rel +10 - min(C_ph_rel(:));
-% elseif useCalVal
-%     for xx = 1:4
-%         for yy = 1:4
-%             calix = 40;%randi([1 64],1,1);
-%             caliy = 6 ;%randi([1 7],1,1);
-%             C_amp(xx,yy) = calibration(xx,yy).C_mag(calix,caliy);
-%             C_ph(xx,yy) = calibration(xx,yy).C_ph(calix,caliy);
-%             C_ph  = C_ph +10 - min(C_ph(:));
-%         end 
-%     end 
-% else
-%     C_amp = -(-ceil(boundariesAtt(1)) + 1 - db(C_amp_rel,'power'));
-%     C_ph  = C_ph_rel +10 - min(C_ph_rel(:));
-% end
-% 
-% C_amp(isinf(C_amp)) = -45;
 
 %% =========================
 % SOLVER OUTPUTS
@@ -249,13 +218,10 @@ disp(V);
 %% =========================
 
 if export_to_IDE
-    %t = datetime("now");
-    %timestamp = datestr(t, "yyyy-mm-dd_HH-MM-SS");
-    %filename = (path + "4x4_validation\settings_" + timestamp +".h");
-    %mkdir C:\Users\iannic01\Personal\Research\Arduino_test\modular_board_test\4x4_matrix\4x4_calibration_mod\calibration_mod\4x4_validation\mix_mat_validation ...
-    %setting11
+    t = datetime("now");
+    timestamp = datestr(t, "yyyy-mm-dd_HH-MM-SS");
+    filename = (path + "4x4_validation\settings_" + timestamp +".h");
     filename = (dothfilename + ".h");
-    %filename = "settings_" + timestamp +".h";
     exportToArduinoHeader(filename, C_amp, Att_dB, C_ph, V);
 end
 

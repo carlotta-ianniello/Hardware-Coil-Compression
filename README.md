@@ -6,8 +6,22 @@ This repository includes the PCB design for a 4x4 mixing matrix that can be used
   <img src="pcb_design.png" width="400">
 </p>
 
+# PCA Compression
+The MATLAB script pca_compression_pipeline_ROI.mat calculates the PCA-based weights for coil compression. 
+
+* Load signal and noise data
+* Compute noise covariance Psi (for pre-whitening)
+* If n_coils=8: evaluate all candidate 4-channel subsets and select the one whose compression matrix phases best fit the hardware phase range, with priority on modes 1 & 2
+* Build ROI mask (SNR threshold, radial crop, or both)
+* Compute pre-whitened PCA via SVD
+* Optimise per-mode global phase rotation into hardware range
+* Compute SNR retention maps for 4/3/2/1 virtual modes
+* Save compression matrix A for calculate_settings_complex.m
+
+When an ROI is selected or loaded, PCA is only performed in the ROI.
+
 # Settings calculation
-This MATLAB script calculate_settings_4x4.mat generates optimized hardware settings for a 4×4 RF compression matrix using measured calibration data. It supports loading a target compression matrix, generating random test matrices, or manually defining custom amplitude and phase targets.
+The MATLAB script calculate_settings_complex.mat generates optimized hardware settings for a 4×4 RF compression matrix using measured calibration data. It supports loading a target compression matrix, generating random test matrices, or manually defining custom amplitude and phase targets.
 
 The script:
 

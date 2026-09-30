@@ -60,6 +60,22 @@ void setOutputVoltage(int row, int col, float voltage) {
 An example of settings is included in setting1.h.
 
 # Bill of Materials
-
 The complete bill of materials for this project can be found in BOM.xlsx, comprehensive of links to vendors and cost. 
+
+# Reference 
+If you use this work, please cite it as follows:
+
+```bibtex
+@inproceedings{Ianniello2026,
+  author    = {Ianniello, C. and Brown, R.},
+  title     = {A flexible hardware-based fully programmable mode-mixing matrix for channel compression applications},
+  booktitle = {2026 ISMRM \& ISMRT Annual Meeting \& Exhibition},
+  address   = {Cape Town, South Africa},
+  year      = {2026}
+}
+```
+
+C. Ianniello and R. Brown, "A flexible hardware-based fully programmable mode-mixing matrix for channel compression applications," in 2026 ISMRM & ISMRT Annual Meeting & Exhibition, Cape Town, South Africa, 2026. 
+
+
 
